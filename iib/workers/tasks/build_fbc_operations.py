@@ -116,6 +116,8 @@ def handle_fbc_operation_request(
             _build_image(temp_dir, 'index.Dockerfile', request_id, arch)
             _push_image(request_id, arch)
 
+        # fbc /configs directory is located 
+
     set_request_state(request_id, 'in_progress', 'Creating the manifest list')
     output_pull_spec = _create_and_push_manifest_list(request_id, arches, build_tags)
 

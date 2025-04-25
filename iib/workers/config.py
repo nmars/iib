@@ -19,10 +19,15 @@ from iib.workers.tasks.iib_static_types import (
     iib_organization_customizations_type,
 )
 
+IIB_PUB_GIT_REPO = 'https://gitlab.cee.redhat.com/nmarsell/iib-pub-index-configs.git'
+IIB_PUB_PENDING_GIT_REPO = 'https://gitlab.cee.redhat.com/nmarsell/iib-pub-pending-index-configs.git'
 
 class Config(object):
     """The base IIB Celery configuration."""
-
+    iib_web_index_to_gitlab_push_map: Dict[str, str] = {
+        'registry-proxy.engineering.redhat.com/rh-osbs/iib-pub': IIB_PUB_GIT_REPO,
+        'registry-proxy.engineering.redhat.com/rh-osbs/iib-pub-pending': IIB_PUB_PENDING_GIT_REPO
+    }
     # When publishing a message, don't continuously retry or else the HTTP connection times out
     broker_transport_options: Dict[str, int] = {'max_retries': 10}
     # Avoid infinite Celery retries when the broker is offline.

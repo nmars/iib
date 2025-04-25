@@ -49,4 +49,4 @@ COPY . .
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt --no-deps --require-hashes
 RUN pip3 install . --no-deps
-CMD ["/bin/celery-3", "-A", "iib.workers.tasks", "worker", "--loglevel=info"]
+CMD ["/bin/celery-3", "-A", "iib.workers.tasks", "worker", "--loglevel=debug"]

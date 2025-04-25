@@ -273,6 +273,7 @@ def _update_index_image_pull_spec(
     :param bool add_or_rm: true if the request is an ``Add`` or ``Rm`` request. defaults to false
     :raises IIBError: if the manifest list couldn't be created and pushed
     """
+    # TODO: Another possible location
     conf = get_worker_config()
     if from_index and overwrite_from_index:
         _overwrite_from_index(
@@ -285,6 +286,8 @@ def _update_index_image_pull_spec(
             overwrite_from_index_token,
         )
         index_image = from_index
+        # TODO: Commit opm render yaml to git repo
+        # _save_to_git(...)
     elif conf['iib_index_image_output_registry']:
         index_image = output_pull_spec.replace(
             conf['iib_registry'], conf['iib_index_image_output_registry'], 1
@@ -960,6 +963,10 @@ def handle_add_request(
             # move migrated catalog to correct location expected in Dockerfile
             shutil.move(catalog_from_index, fbc_dir_path)
 
+            log.info(f"fbc_dir_path: {fbc_dir_path}")
+            fbc_dir_contents = run_cmd(["ls", "-alR", fbc_dir_path], exc_msg="Error running ls -alR")
+            log.info(fbc_dir_contents)
+
             # Remove outdated cache before generating new one
             local_cache_path = os.path.join(temp_dir, 'cache')
             if os.path.exists(local_cache_path):
@@ -1054,7 +1061,8 @@ def handle_rm_request(
     from_index_resolved = prebuild_info['from_index_resolved']
     Opm.set_opm_version(from_index_resolved)
 
-    with tempfile.TemporaryDirectory(prefix=f'iib-{request_id}-') as temp_dir:
+    # DEV: added delete=False
+    with tempfile.TemporaryDirectory(prefix=f'iib-{request_id}-', delete=False) as temp_dir:
         with set_registry_token(overwrite_from_index_token, from_index_resolved, append=True):
             image_is_fbc = is_image_fbc(from_index_resolved)
 

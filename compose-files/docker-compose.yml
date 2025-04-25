@@ -128,7 +128,7 @@ services:
           -p iibpassword registry:8443 &&
         pip3 install watchdog[watchmedo] &&
         watchmedo auto-restart -d ./iib/workers -p '*.py' --recursive \
-          -- celery -A iib.workers.tasks worker --loglevel=info
+          -- celery -A iib.workers.tasks worker --loglevel=debug
     environment:
       IIB_DEV: 'true'
       REGISTRY_AUTH_FILE: '/root/.docker/config.json'
@@ -148,6 +148,7 @@ services:
       - request-logs-volume:/var/log/iib/requests:z
       - request-related-bundles-volume:/var/lib/requests/related_bundles:z
       - request-recursive-related-bundles-volume:/var/lib/requests/recursive_related_bundles:z
+      - /home/nmarsell/workspace/CLOUDDST-23763/dot-docker:/root/.docker:z
     depends_on:
       - rabbitmq
       - registry
