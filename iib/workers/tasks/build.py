@@ -273,6 +273,7 @@ def _update_index_image_pull_spec(
     :param bool add_or_rm: true if the request is an ``Add`` or ``Rm`` request. defaults to false
     :raises IIBError: if the manifest list couldn't be created and pushed
     """
+    # TODO: Another possible location
     conf = get_worker_config()
     if from_index and overwrite_from_index:
         _overwrite_from_index(
@@ -285,6 +286,8 @@ def _update_index_image_pull_spec(
             overwrite_from_index_token,
         )
         index_image = from_index
+        # TODO: Commit opm render yaml to git repo
+        # _save_to_git(...)
     elif conf['iib_index_image_output_registry']:
         index_image = output_pull_spec.replace(
             conf['iib_registry'], conf['iib_index_image_output_registry'], 1
